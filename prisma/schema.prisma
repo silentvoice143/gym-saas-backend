@@ -1,14 +1,264 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// This is your Prisma schema file.
+// Learn more: https://pris.ly/d/prisma-schema
 
 generator client {
   provider = "prisma-client"
   output   = "../generated/prisma"
- 
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+// ─────────────────────────────────────────────
+// ENUMS
+// ─────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  OWNER
+  MEMBER
+}
+
+enum MembershipStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum SubscriptionStatus {
+  TRIAL
+  ACTIVE
+  EXPIRED
+  CANCELLED
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum NotificationDeliveryStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+// ─────────────────────────────────────────────
+// USER
+// ─────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         UserRole @default(MEMBER)
+
+  // OWNER → gyms
+  gyms Gym[] @relation("GymOwner")
+
+  // MEMBER → member profile
+  member Member?
+
+  // USER → devices
+  devices UserDevice[]
+
+  // USER → notification recipients
+  notificationRecipients NotificationRecipient[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────
+// GYM
+// ─────────────────────────────────────────────
+
+model Gym {
+  id      String @id @default(cuid())
+  ownerId String
+
+  name    String
+  email   String?
+  phone   String?
+  address String?
+  city    String?
+  state   String?
+  zipCode String?
+
+  owner User @relation("GymOwner",fields: [ownerId],references: [id],onDelete: Cascade)
+
+  memberships Membership[] @relation("GymMemberships")
+
+  notifications Notification[] @relation("GymNotifications")
+
+  subscriptions Subscription[] @relation("GymSubscriptions")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
+  @@index([name])
+  @@index([city])
+}
+
+// ─────────────────────────────────────────────
+// MEMBER
+// ─────────────────────────────────────────────
+
+model Member {
+  id String @id @default(cuid())
+
+  userId String @unique
+
+  phone   String?
+  qrToken String @unique
+
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+
+  memberships Membership[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────
+// MEMBERSHIP
+// ─────────────────────────────────────────────
+
+model Membership {
+  id       String @id @default(cuid())
+  memberId String
+  gymId    String
+
+  startDate DateTime
+  endDate   DateTime
+  status    MembershipStatus @default(ACTIVE)
+
+  member Member @relation(fields: [memberId],references: [id],onDelete: Cascade)
+
+  gym Gym @relation("GymMemberships",fields: [gymId],references: [id],onDelete: Cascade)
+
+  // One membership can have many attendance records
+  attendance Attendance[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([memberId])
+  @@index([gymId])
+  @@index([memberId, status])
+  @@index([gymId, status])
+}
+
+// ─────────────────────────────────────────────
+// ATTENDANCE
+// ─────────────────────────────────────────────
+
+model Attendance {
+  id String @id @default(cuid())
+
+  membershipId String
+
+  checkedInAt DateTime
+
+  membership Membership @relation(fields: [membershipId],references: [id],onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([membershipId])
+  @@index([membershipId, checkedInAt])
+}
+
+// ─────────────────────────────────────────────
+// SUBSCRIPTION
+// ─────────────────────────────────────────────
+
+model Subscription {
+  id    String @id @default(cuid())
+  gymId String
+
+  provider String
+  status   SubscriptionStatus @default(TRIAL)
+
+  startDate DateTime
+  endDate   DateTime
+
+  gym Gym @relation("GymSubscriptions",fields: [gymId],references: [id],onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([gymId])
+  @@index([gymId, status])
+}
+
+// ─────────────────────────────────────────────
+// NOTIFICATION
+// ─────────────────────────────────────────────
+
+model Notification {
+  id    String @id @default(cuid())
+  gymId String
+
+  title   String
+  message String
+  status  NotificationStatus @default(PENDING)
+
+  gym Gym @relation("GymNotifications",fields: [gymId],references: [id],onDelete: Cascade)
+
+  recipients NotificationRecipient[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([gymId])
+  @@index([gymId, status])
+}
+
+// ─────────────────────────────────────────────
+// USER DEVICE
+// ─────────────────────────────────────────────
+
+model UserDevice {
+  id String @id @default(cuid())
+
+  userId   String
+  fcmToken String @unique
+
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+}
+
+// ─────────────────────────────────────────────
+// NOTIFICATION RECIPIENT
+// ─────────────────────────────────────────────
+
+model NotificationRecipient {
+  id String @id @default(cuid())
+
+  notificationId String
+  userId         String
+
+  status NotificationDeliveryStatus @default(PENDING)
+
+  sentAt DateTime?
+  readAt DateTime?
+
+  notification Notification @relation(fields: [notificationId],references: [id],onDelete: Cascade)
+
+  user User @relation(fields: [userId],references: [id],onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([notificationId, userId])
+  @@index([userId])
+  @@index([notificationId])
+  @@index([userId, status])
 }

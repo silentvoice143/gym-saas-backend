@@ -99,57 +99,193 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 ## Er Diagram
 
-                         ┌──────────────┐
-                         │     USER     │
-                         ├──────────────┤
-                         │ PK id        │
-                         │ name         │
-                         │ email        │
-                         │ password_hash│
-                         │ role         │
-                         └──────┬───────┘
-                                │
-                                │
-                                ▼
-                         ┌──────────────┐
-                         │     GYM      │
-                         ├──────────────┤
-                         │ PK id        │
-                         │ owner_id     │
-                         │ name         │
-                         │ created_at   │
-                         │ updated_at   │
-                         └──────┬───────┘
-                                │
-                 ┌──────────────┼───────────────┐
-                 │              │               │
-                 │ 1            │ 1             │ 1
-                 │              │               │
-                 │ N            │ N             │ N
-                 ▼              ▼               ▼
-          ┌────────────┐ ┌─────────────┐ ┌──────────────┐
-          │   MEMBER   │ │NOTIFICATION │ │ SUBSCRIPTION │
-          ├────────────┤ ├─────────────┤ ├──────────────┤
-          │ PK id      │ │ PK id       │ │ PK id        │
-          │ FK gym_id  │ │ FK gym_id   │ │ FK gym_id    │
-          │ name       │ │ title       │ │ provider     │
-          │ phone      │ │ message     │ │ status       │
-          │ email      │ │ created_at  │ │ start_date   │
-          │ qr_token   │ └─────────────┘ │ end_date     │
-          └──────┬─────┘                 └──────────────┘
-                 │
-             ┌───┴──────────┐
-             │              │
-             │ 1            │ 1
-             │              │
-             │ N            │ N
-             ▼              ▼
-      ┌─────────────┐ ┌──────────────┐
-      │ MEMBERSHIP  │ │  ATTENDANCE  │
-      ├─────────────┤ ├──────────────┤
-      │ PK id       │ │ PK id        │
-      │ FK member_id│ │ FK member_id │
-      │ start_date  │ │ checked_in_at│
-      │ end_date    │ │ created_at   │
-      │ status      │ └──────────────┘
-      └─────────────┘
+## ER Diagram
+
+```text
+                              ┌──────────────────────┐
+                              │         USER         │
+                              ├──────────────────────┤
+                              │ PK id                │
+                              │ name                 │
+                              │ email UNIQUE         │
+                              │ passwordHash         │
+                              │ role                 │
+                              │ ADMIN                │
+                              │ OWNER                │
+                              │ MEMBER               │
+                              └──────────┬───────────┘
+                                         │
+                       ┌─────────────────┼─────────────────┐
+                       │                 │                 │
+                     1 │               1 │               1 │
+                       │                 │                 │
+                    0..N│              0..1│               N│
+                       ▼                 ▼                 ▼
+              ┌────────────────┐  ┌──────────────┐  ┌─────────────────┐
+              │      GYM       │  │    MEMBER    │  │   USER_DEVICE   │
+              ├────────────────┤  ├──────────────┤  ├─────────────────┤
+              │ PK id          │  │ PK id        │  │ PK id           │
+              │ FK ownerId     │  │ FK userId    │  │ FK userId       │
+              │ name           │  │ phone        │  │ fcmToken UNIQUE │
+              │ email          │  │ qrToken      │  └─────────────────┘
+              │ phone          │  └───────┬──────┘
+              │ address        │          │
+              │ city           │          │ 1
+              │ state          │          │
+              │ zipCode        │          │ N
+              └───────┬────────┘          ▼
+                      │             ┌────────────────────┐
+                      │             │     MEMBERSHIP     │
+                      │             ├────────────────────┤
+                      │             │ PK id              │
+                      │             │ FK memberId        │
+                      │             │ FK gymId           │
+                      │             │ startDate          │
+                      │             │ endDate            │
+                      │             │ status             │
+                      │             └─────────┬──────────┘
+                      │                       │
+                      │                       │ 1
+                      │                       │
+                      │                       │ N
+                      │                       ▼
+                      │             ┌────────────────────┐
+                      │             │     ATTENDANCE     │
+                      │             ├────────────────────┤
+                      │             │ PK id              │
+                      │             │ FK membershipId    │
+                      │             │ checkedInAt        │
+                      │             │ createdAt          │
+                      │             └────────────────────┘
+                      │
+          ┌───────────┼──────────────────┐
+          │           │                  │
+          │ 1         │ 1                │ 1
+          │           │                  │
+          │ N         │ N                │ N
+          ▼           ▼                  ▼
+ ┌────────────────┐ ┌────────────────┐ ┌─────────────────────────┐
+ │ SUBSCRIPTION   │ │ NOTIFICATION   │ │                         │
+ ├────────────────┤ ├────────────────┤ │                         │
+ │ PK id          │ │ PK id          │ │                         │
+ │ FK gymId       │ │ FK gymId       │ │                         │
+ │ provider       │ │ title          │ │                         │
+ │ status         │ │ message        │ │                         │
+ │ startDate      │ │ status         │ │                         │
+ │ endDate        │ └───────┬────────┘ │                         │
+ └────────────────┘         │          │                         │
+                            │ 1        │                         │
+                            │          │                         │
+                            │ N        │                         │
+                            ▼          │                         │
+                  ┌─────────────────────────┐                     │
+                  │ NOTIFICATION_RECIPIENT  │                     │
+                  ├─────────────────────────┤                     │
+                  │ PK id                   │                     │
+                  │ FK notificationId       │                     │
+                  │ FK userId               │                     │
+                  │ status                  │                     │
+                  │ sentAt                  │                     │
+                  │ readAt                  │                     │
+                  └───────────┬─────────────┘                     │
+                              │                                   │
+                              │ N                                 │
+                              │                                   │
+                              │ 1                                 │
+                              ▼                                   │
+                             USER ◄───────────────────────────────┘
+```
+
+## ER Diagram
+
+```mermaiderDiagram
+    USER ||--o{ GYM : owns
+    USER ||--o| MEMBER : has
+    USER ||--o{ USER_DEVICE : has
+    USER ||--o{ NOTIFICATION_RECIPIENT : receives
+
+    GYM ||--o{ MEMBERSHIP : has
+    GYM ||--o{ SUBSCRIPTION : has
+    GYM ||--o{ NOTIFICATION : creates
+
+    MEMBER ||--o{ MEMBERSHIP : has
+
+    MEMBERSHIP ||--o{ ATTENDANCE : records
+
+    NOTIFICATION ||--o{ NOTIFICATION_RECIPIENT : targets
+
+    USER {
+        string id PK
+        string name
+        string email UK
+        string passwordHash
+        UserRole role
+    }
+
+    GYM {
+        string id PK
+        string ownerId FK
+        string name
+        string email
+        string phone
+        string address
+        string city
+        string state
+        string zipCode
+    }
+
+    MEMBER {
+        string id PK
+        string userId FK
+        string phone
+        string qrToken UK
+    }
+
+    MEMBERSHIP {
+        string id PK
+        string memberId FK
+        string gymId FK
+        datetime startDate
+        datetime endDate
+        MembershipStatus status
+    }
+
+    ATTENDANCE {
+        string id PK
+        string membershipId FK
+        datetime checkedInAt
+        datetime createdAt
+    }
+
+    SUBSCRIPTION {
+        string id PK
+        string gymId FK
+        string provider
+        SubscriptionStatus status
+        datetime startDate
+        datetime endDate
+    }
+
+    NOTIFICATION {
+        string id PK
+        string gymId FK
+        string title
+        string message
+        NotificationStatus status
+    }
+
+    NOTIFICATION_RECIPIENT {
+        string id PK
+        string notificationId FK
+        string userId FK
+        NotificationDeliveryStatus status
+        datetime sentAt
+        datetime readAt
+    }
+
+    USER_DEVICE {
+        string id PK
+        string userId FK
+        string fcmToken UK
+    }
+```
