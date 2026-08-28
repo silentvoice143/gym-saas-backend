@@ -198,7 +198,11 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
 ## ER Diagram
 
-```mermaiderDiagram
+## ER Diagram
+
+```mermaid
+erDiagram
+
     USER ||--o{ GYM : owns
     USER ||--o| MEMBER : has
     USER ||--o{ USER_DEVICE : has
@@ -209,7 +213,6 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
     GYM ||--o{ NOTIFICATION : creates
 
     MEMBER ||--o{ MEMBERSHIP : has
-
     MEMBERSHIP ||--o{ ATTENDANCE : records
 
     NOTIFICATION ||--o{ NOTIFICATION_RECIPIENT : targets
@@ -217,9 +220,9 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
     USER {
         string id PK
         string name
-        string email UK
+        string email
         string passwordHash
-        UserRole role
+        string role
     }
 
     GYM {
@@ -238,7 +241,7 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
         string id PK
         string userId FK
         string phone
-        string qrToken UK
+        string qrToken
     }
 
     MEMBERSHIP {
@@ -247,7 +250,7 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
         string gymId FK
         datetime startDate
         datetime endDate
-        MembershipStatus status
+        string status
     }
 
     ATTENDANCE {
@@ -261,7 +264,7 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
         string id PK
         string gymId FK
         string provider
-        SubscriptionStatus status
+        string status
         datetime startDate
         datetime endDate
     }
@@ -271,14 +274,14 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
         string gymId FK
         string title
         string message
-        NotificationStatus status
+        string status
     }
 
     NOTIFICATION_RECIPIENT {
         string id PK
         string notificationId FK
         string userId FK
-        NotificationDeliveryStatus status
+        string status
         datetime sentAt
         datetime readAt
     }
@@ -286,6 +289,6 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
     USER_DEVICE {
         string id PK
         string userId FK
-        string fcmToken UK
+        string fcmToken
     }
 ```

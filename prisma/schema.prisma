@@ -3,7 +3,8 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma"
+  output   = "../src/generated/prisma"
+  moduleFormat = "cjs"
 }
 
 datasource db {
@@ -55,6 +56,7 @@ model User {
   email        String   @unique
   passwordHash String
   role         UserRole @default(MEMBER)
+  mustChangePassword  Boolean  @default(false)
 
   // OWNER → gyms
   gyms Gym[] @relation("GymOwner")

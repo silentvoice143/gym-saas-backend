@@ -6,6 +6,9 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
+import { OtpModule } from './common/otp/otp.module';
+import { EmailModule } from './common/email/email.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -16,6 +19,14 @@ import { AuthModule } from './auth/auth.module';
     HealthModule,
     UsersModule,
     AuthModule,
+    OtpModule,
+    EmailModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'development-secret',
+      signOptions: {
+        expiresIn: process.env.JWT_EXPIRES_IN || ('7d' as any),
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
