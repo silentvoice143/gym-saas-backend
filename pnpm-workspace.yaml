@@ -1,5 +1,8 @@
 allowBuilds:
+  '@firebase/util': true
   '@prisma/engines': true
   '@swc/core': false
   bcrypt: true
+  msgpackr-extract: true
   prisma: true
+  protobufjs: true

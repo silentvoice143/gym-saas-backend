@@ -11,6 +11,8 @@ import { AuthModule } from './auth/auth.module';
 import { OtpModule } from './common/otp/otp.module';
 import { EmailModule } from './common/email/email.module';
 import { MembershipsModule } from './membership/memberships.module';
+import { AttendanceModule } from './attendance/attendance.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -25,6 +27,8 @@ import { MembershipsModule } from './membership/memberships.module';
     OtpModule,
     EmailModule,
     MembershipsModule,
+    AttendanceModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

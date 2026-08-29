@@ -227,6 +227,7 @@ export type MembershipOrderByWithRelationInput = {
 
 export type MembershipWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  memberId_gymId?: Prisma.MembershipMemberIdGymIdCompoundUniqueInput
   AND?: Prisma.MembershipWhereInput | Prisma.MembershipWhereInput[]
   OR?: Prisma.MembershipWhereInput[]
   NOT?: Prisma.MembershipWhereInput | Prisma.MembershipWhereInput[]
@@ -240,7 +241,7 @@ export type MembershipWhereUniqueInput = Prisma.AtLeast<{
   member?: Prisma.XOR<Prisma.MemberScalarRelationFilter, Prisma.MemberWhereInput>
   gym?: Prisma.XOR<Prisma.GymScalarRelationFilter, Prisma.GymWhereInput>
   attendance?: Prisma.AttendanceListRelationFilter
-}, "id">
+}, "id" | "memberId_gymId">
 
 export type MembershipOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -357,6 +358,11 @@ export type MembershipListRelationFilter = {
 
 export type MembershipOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type MembershipMemberIdGymIdCompoundUniqueInput = {
+  memberId: string
+  gymId: string
 }
 
 export type MembershipCountOrderByAggregateInput = {

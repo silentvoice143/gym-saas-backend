@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -8,9 +9,9 @@ import {
 import { PrismaService } from 'src/database/prisma.service';
 
 import { CreateEnrollmentDto } from './dto/membership-enrollment.dto.ts/create-enrollment.dto.ts';
-import { UpdateMembershipStatusDto } from './dto/update-membership-status.dto.ts/update-membership-status.dto.ts.js';
-import { MembershipStatus } from 'src/generated/prisma/enums.js';
-import { UpdateMembershipDto } from './dto/update-membership.dto.ts/update-membership.dto.ts.js';
+import { UpdateMembershipStatusDto } from './dto/update-membership-status.dto.ts/update-membership-status.dto.ts';
+import { MembershipStatus } from 'src/generated/prisma/enums';
+import { UpdateMembershipDto } from './dto/update-membership.dto.ts/update-membership.dto.ts';
 
 @Injectable()
 export class MembershipsService {
@@ -123,7 +124,43 @@ export class MembershipsService {
       },
     };
   }
-  async getMemberships(userId: string, role: string, status?: string) {
+
+  async getGymMemberships(
+    userId: string,
+    role: string,
+    gymId: string,
+    status?: MembershipStatus,
+    limit = 20,
+    cursor?: string,
+  ) {
+    if (!gymId) {
+      throw new BadRequestException('gymId is required');
+    }
+
+    if (!Number.isInteger(limit) || limit < 1 || limit > 100) {
+      throw new BadRequestException('Limit must be between 1 and 100');
+    }
+
+    // 1. Verify gym exists
+    const gym = await this.prisma.gym.findUnique({
+      where: {
+        id: gymId,
+      },
+      select: {
+        id: true,
+        name: true,
+        ownerId: true,
+      },
+    });
+
+    if (!gym) {
+      throw new NotFoundException('Gym not found');
+    }
+
+    // =========================
+    // MEMBER
+    // =========================
+
     if (role === 'MEMBER') {
       const member = await this.prisma.member.findUnique({
         where: {
@@ -135,15 +172,18 @@ export class MembershipsService {
         throw new NotFoundException('Member profile not found');
       }
 
-      const memberships = await this.prisma.membership.findMany({
+      const membership = await this.prisma.membership.findFirst({
         where: {
           memberId: member.id,
+          gymId,
+
           ...(status
             ? {
-                status: status as any,
+                status,
               }
             : {}),
         },
+
         include: {
           gym: {
             select: {
@@ -152,35 +192,43 @@ export class MembershipsService {
             },
           },
         },
+
         orderBy: {
           createdAt: 'desc',
         },
       });
 
       return {
-        memberships,
+        gym: {
+          id: gym.id,
+          name: gym.name,
+        },
+
+        membership,
       };
     }
 
+    // =========================
+    // OWNER
+    // =========================
+
     if (role === 'OWNER') {
+      if (gym.ownerId !== userId) {
+        throw new ForbiddenException('You do not own this gym');
+      }
+
       const memberships = await this.prisma.membership.findMany({
         where: {
-          gym: {
-            ownerId: userId,
-          },
+          gymId,
+
           ...(status
             ? {
-                status: status as any,
+                status,
               }
             : {}),
         },
+
         include: {
-          gym: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
           member: {
             include: {
               user: {
@@ -193,13 +241,42 @@ export class MembershipsService {
             },
           },
         },
+
         orderBy: {
           createdAt: 'desc',
         },
+
+        take: limit + 1,
+
+        ...(cursor
+          ? {
+              cursor: {
+                id: cursor,
+              },
+              skip: 1,
+            }
+          : {}),
       });
 
+      const hasNextPage = memberships.length > limit;
+
+      const results = hasNextPage ? memberships.slice(0, limit) : memberships;
+
+      const nextCursor = hasNextPage ? results[results.length - 1].id : null;
+
       return {
-        memberships,
+        gym: {
+          id: gym.id,
+          name: gym.name,
+        },
+
+        memberships: results,
+
+        pagination: {
+          limit,
+          hasNextPage,
+          nextCursor,
+        },
       };
     }
 
@@ -312,159 +389,6 @@ export class MembershipsService {
 
     return {
       message: 'Enrollment approved successfully',
-
-      membership: {
-        id: updatedMembership.id,
-        status: updatedMembership.status,
-        startDate: updatedMembership.startDate,
-        endDate: updatedMembership.endDate,
-
-        gym: {
-          id: membership.gym.id,
-          name: membership.gym.name,
-        },
-
-        member: {
-          id: membership.member.id,
-          name: membership.member.user.name,
-          email: membership.member.user.email,
-        },
-      },
-    };
-  }
-
-  async getGymMembership(userId: string, gymId: string) {
-    // 1. Find member
-    const member = await this.prisma.member.findUnique({
-      where: {
-        userId,
-      },
-    });
-
-    if (!member) {
-      throw new NotFoundException('Member profile not found');
-    }
-
-    // 2. Find membership for this member + gym
-    const membership = await this.prisma.membership.findFirst({
-      where: {
-        memberId: member.id,
-        gymId,
-      },
-      include: {
-        gym: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    });
-
-    if (!membership) {
-      throw new NotFoundException('Membership not found for this gym');
-    }
-
-    return {
-      membership: {
-        id: membership.id,
-        status: membership.status,
-        startDate: membership.startDate,
-        endDate: membership.endDate,
-
-        gym: {
-          id: membership.gym.id,
-          name: membership.gym.name,
-        },
-
-        createdAt: membership.createdAt,
-        updatedAt: membership.updatedAt,
-      },
-    };
-  }
-
-  //Update Membership
-  async updateMembership(
-    ownerId: string,
-    membershipId: string,
-    dto: UpdateMembershipDto,
-  ) {
-    // 1. Find membership
-    const membership = await this.prisma.membership.findUnique({
-      where: {
-        id: membershipId,
-      },
-      include: {
-        gym: {
-          select: {
-            id: true,
-            name: true,
-            ownerId: true,
-          },
-        },
-        member: {
-          include: {
-            user: {
-              select: {
-                id: true,
-                name: true,
-                email: true,
-              },
-            },
-          },
-        },
-      },
-    });
-
-    if (!membership) {
-      throw new NotFoundException('Membership not found');
-    }
-
-    // 2. Make sure owner owns the gym
-    if (membership.gym.ownerId !== ownerId) {
-      throw new ForbiddenException('You are not the owner of this gym');
-    }
-
-    // 3. Validate dates
-    const startDate = dto.startDate
-      ? new Date(dto.startDate)
-      : membership.startDate;
-
-    const endDate = dto.endDate ? new Date(dto.endDate) : membership.endDate;
-
-    if (startDate && endDate && startDate >= endDate) {
-      throw new ConflictException('Start date must be before end date');
-    }
-
-    // 4. Build update data
-    const updateData: {
-      startDate?: Date | null;
-      endDate?: Date | null;
-      status?: MembershipStatus;
-    } = {};
-
-    if (dto.startDate !== undefined) {
-      updateData.startDate = new Date(dto.startDate);
-    }
-
-    if (dto.endDate !== undefined) {
-      updateData.endDate = new Date(dto.endDate);
-    }
-
-    if (dto.status !== undefined) {
-      updateData.status = dto.status;
-    }
-
-    // 5. Update membership
-    const updatedMembership = await this.prisma.membership.update({
-      where: {
-        id: membershipId,
-      },
-      data: updateData,
-    });
-
-    return {
-      message: 'Membership updated successfully',
 
       membership: {
         id: updatedMembership.id,

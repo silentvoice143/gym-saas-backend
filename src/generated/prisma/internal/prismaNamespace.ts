@@ -1154,6 +1154,7 @@ export const GymScalarFieldEnum = {
   city: 'city',
   state: 'state',
   zipCode: 'zipCode',
+  timezone: 'timezone',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

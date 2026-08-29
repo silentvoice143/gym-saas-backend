@@ -34,6 +34,7 @@ export type GymMinAggregateOutputType = {
   city: string | null
   state: string | null
   zipCode: string | null
+  timezone: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -48,6 +49,7 @@ export type GymMaxAggregateOutputType = {
   city: string | null
   state: string | null
   zipCode: string | null
+  timezone: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -62,6 +64,7 @@ export type GymCountAggregateOutputType = {
   city: number
   state: number
   zipCode: number
+  timezone: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -78,6 +81,7 @@ export type GymMinAggregateInputType = {
   city?: true
   state?: true
   zipCode?: true
+  timezone?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -92,6 +96,7 @@ export type GymMaxAggregateInputType = {
   city?: true
   state?: true
   zipCode?: true
+  timezone?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -106,6 +111,7 @@ export type GymCountAggregateInputType = {
   city?: true
   state?: true
   zipCode?: true
+  timezone?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -193,6 +199,7 @@ export type GymGroupByOutputType = {
   city: string | null
   state: string | null
   zipCode: string | null
+  timezone: string
   createdAt: Date
   updatedAt: Date
   _count: GymCountAggregateOutputType | null
@@ -228,6 +235,7 @@ export type GymWhereInput = {
   city?: Prisma.StringNullableFilter<"Gym"> | string | null
   state?: Prisma.StringNullableFilter<"Gym"> | string | null
   zipCode?: Prisma.StringNullableFilter<"Gym"> | string | null
+  timezone?: Prisma.StringFilter<"Gym"> | string
   createdAt?: Prisma.DateTimeFilter<"Gym"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Gym"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -246,6 +254,7 @@ export type GymOrderByWithRelationInput = {
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   zipCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   owner?: Prisma.UserOrderByWithRelationInput
@@ -267,6 +276,7 @@ export type GymWhereUniqueInput = Prisma.AtLeast<{
   city?: Prisma.StringNullableFilter<"Gym"> | string | null
   state?: Prisma.StringNullableFilter<"Gym"> | string | null
   zipCode?: Prisma.StringNullableFilter<"Gym"> | string | null
+  timezone?: Prisma.StringFilter<"Gym"> | string
   createdAt?: Prisma.DateTimeFilter<"Gym"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Gym"> | Date | string
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -285,6 +295,7 @@ export type GymOrderByWithAggregationInput = {
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   state?: Prisma.SortOrderInput | Prisma.SortOrder
   zipCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.GymCountOrderByAggregateInput
@@ -305,6 +316,7 @@ export type GymScalarWhereWithAggregatesInput = {
   city?: Prisma.StringNullableWithAggregatesFilter<"Gym"> | string | null
   state?: Prisma.StringNullableWithAggregatesFilter<"Gym"> | string | null
   zipCode?: Prisma.StringNullableWithAggregatesFilter<"Gym"> | string | null
+  timezone?: Prisma.StringWithAggregatesFilter<"Gym"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Gym"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Gym"> | Date | string
 }
@@ -318,6 +330,7 @@ export type GymCreateInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutGymsInput
@@ -336,6 +349,7 @@ export type GymUncheckedCreateInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutGymInput
@@ -352,6 +366,7 @@ export type GymUpdateInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutGymsNestedInput
@@ -370,6 +385,7 @@ export type GymUncheckedUpdateInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutGymNestedInput
@@ -387,6 +403,7 @@ export type GymCreateManyInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -400,6 +417,7 @@ export type GymUpdateManyMutationInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -414,6 +432,7 @@ export type GymUncheckedUpdateManyInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -438,6 +457,7 @@ export type GymCountOrderByAggregateInput = {
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   zipCode?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -452,6 +472,7 @@ export type GymMaxOrderByAggregateInput = {
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   zipCode?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -466,6 +487,7 @@ export type GymMinOrderByAggregateInput = {
   city?: Prisma.SortOrder
   state?: Prisma.SortOrder
   zipCode?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -572,6 +594,7 @@ export type GymCreateWithoutOwnerInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.MembershipCreateNestedManyWithoutGymInput
@@ -588,6 +611,7 @@ export type GymUncheckedCreateWithoutOwnerInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutGymInput
@@ -634,6 +658,7 @@ export type GymScalarWhereInput = {
   city?: Prisma.StringNullableFilter<"Gym"> | string | null
   state?: Prisma.StringNullableFilter<"Gym"> | string | null
   zipCode?: Prisma.StringNullableFilter<"Gym"> | string | null
+  timezone?: Prisma.StringFilter<"Gym"> | string
   createdAt?: Prisma.DateTimeFilter<"Gym"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Gym"> | Date | string
 }
@@ -647,6 +672,7 @@ export type GymCreateWithoutMembershipsInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutGymsInput
@@ -664,6 +690,7 @@ export type GymUncheckedCreateWithoutMembershipsInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutGymInput
@@ -695,6 +722,7 @@ export type GymUpdateWithoutMembershipsInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutGymsNestedInput
@@ -712,6 +740,7 @@ export type GymUncheckedUpdateWithoutMembershipsInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutGymNestedInput
@@ -727,6 +756,7 @@ export type GymCreateWithoutSubscriptionsInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutGymsInput
@@ -744,6 +774,7 @@ export type GymUncheckedCreateWithoutSubscriptionsInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutGymInput
@@ -775,6 +806,7 @@ export type GymUpdateWithoutSubscriptionsInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutGymsNestedInput
@@ -792,6 +824,7 @@ export type GymUncheckedUpdateWithoutSubscriptionsInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutGymNestedInput
@@ -807,6 +840,7 @@ export type GymCreateWithoutNotificationsInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutGymsInput
@@ -824,6 +858,7 @@ export type GymUncheckedCreateWithoutNotificationsInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
   memberships?: Prisma.MembershipUncheckedCreateNestedManyWithoutGymInput
@@ -855,6 +890,7 @@ export type GymUpdateWithoutNotificationsInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutGymsNestedInput
@@ -872,6 +908,7 @@ export type GymUncheckedUpdateWithoutNotificationsInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutGymNestedInput
@@ -887,6 +924,7 @@ export type GymCreateManyOwnerInput = {
   city?: string | null
   state?: string | null
   zipCode?: string | null
+  timezone?: string
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -900,6 +938,7 @@ export type GymUpdateWithoutOwnerInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUpdateManyWithoutGymNestedInput
@@ -916,6 +955,7 @@ export type GymUncheckedUpdateWithoutOwnerInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   memberships?: Prisma.MembershipUncheckedUpdateManyWithoutGymNestedInput
@@ -932,6 +972,7 @@ export type GymUncheckedUpdateManyWithoutOwnerInput = {
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   state?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -995,6 +1036,7 @@ export type GymSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   city?: boolean
   state?: boolean
   zipCode?: boolean
+  timezone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1014,6 +1056,7 @@ export type GymSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   city?: boolean
   state?: boolean
   zipCode?: boolean
+  timezone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1029,6 +1072,7 @@ export type GymSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   city?: boolean
   state?: boolean
   zipCode?: boolean
+  timezone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1044,11 +1088,12 @@ export type GymSelectScalar = {
   city?: boolean
   state?: boolean
   zipCode?: boolean
+  timezone?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type GymOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "name" | "email" | "phone" | "address" | "city" | "state" | "zipCode" | "createdAt" | "updatedAt", ExtArgs["result"]["gym"]>
+export type GymOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "name" | "email" | "phone" | "address" | "city" | "state" | "zipCode" | "timezone" | "createdAt" | "updatedAt", ExtArgs["result"]["gym"]>
 export type GymInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   memberships?: boolean | Prisma.Gym$membershipsArgs<ExtArgs>
@@ -1081,6 +1126,7 @@ export type $GymPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     city: string | null
     state: string | null
     zipCode: string | null
+    timezone: string
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["gym"]>
@@ -1519,6 +1565,7 @@ export interface GymFieldRefs {
   readonly city: Prisma.FieldRef<"Gym", 'String'>
   readonly state: Prisma.FieldRef<"Gym", 'String'>
   readonly zipCode: Prisma.FieldRef<"Gym", 'String'>
+  readonly timezone: Prisma.FieldRef<"Gym", 'String'>
   readonly createdAt: Prisma.FieldRef<"Gym", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Gym", 'DateTime'>
 }
