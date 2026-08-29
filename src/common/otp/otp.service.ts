@@ -5,7 +5,7 @@ import * as bcrypt from 'bcrypt';
 interface PendingRegistration {
   name: string;
   email: string;
-  gymName: string;
+  gymName?: string;
   passwordHash: string;
   otpHash: string;
 }
@@ -34,9 +34,9 @@ export class OtpService {
     registration: {
       name: string;
       email: string;
-      gymName: string;
       passwordHash: string;
       otp: string;
+      gymName?: string;
     },
   ): Promise<void> {
     const otpHash = await bcrypt.hash(registration.otp, 10);
@@ -44,9 +44,11 @@ export class OtpService {
     const data: PendingRegistration = {
       name: registration.name,
       email: registration.email,
-      gymName: registration.gymName,
       passwordHash: registration.passwordHash,
       otpHash,
+      ...(registration.gymName && {
+        gymName: registration.gymName,
+      }),
     };
 
     await this.redis.set(

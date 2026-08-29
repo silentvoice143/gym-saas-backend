@@ -21,7 +21,9 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 export const MembershipStatus = {
   ACTIVE: 'ACTIVE',
   EXPIRED: 'EXPIRED',
-  CANCELLED: 'CANCELLED'
+  CANCELLED: 'CANCELLED',
+  PENDING: 'PENDING',
+  REJECTED: 'REJECTED'
 } as const
 
 export type MembershipStatus = (typeof MembershipStatus)[keyof typeof MembershipStatus]

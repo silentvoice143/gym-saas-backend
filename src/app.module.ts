@@ -1,32 +1,30 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+
 import { HealthModule } from './health/health.module';
-import { ConfigModule } from '@nestjs/config';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { AuthModule } from './auth/auth.module';
 import { OtpModule } from './common/otp/otp.module';
 import { EmailModule } from './common/email/email.module';
-import { JwtModule } from '@nestjs/jwt';
+import { MembershipsModule } from './membership/memberships.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
     DatabaseModule,
     HealthModule,
-    UsersModule,
+    UserModule,
     AuthModule,
     OtpModule,
     EmailModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'development-secret',
-      signOptions: {
-        expiresIn: process.env.JWT_EXPIRES_IN || ('7d' as any),
-      },
-    }),
+    MembershipsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -15,6 +15,7 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto.ts/forgot-password.
 import { ChangePasswordDto } from './dto/change-password.dto.ts/change-password.dto.ts';
 import { randomBytes } from 'crypto';
 import { JwtService } from '@nestjs/jwt';
+import { CreateMemberDto } from './dto/create-member.dto.ts/create-member.dto.ts';
 
 @Injectable()
 export class AuthService {
@@ -136,6 +137,36 @@ export class AuthService {
       message: 'Verification OTP sent to your email',
     };
   }
+
+  async registerMember(dto: CreateMemberDto) {
+    const existingUser = await this.prisma.user.findUnique({
+      where: {
+        email: dto.email,
+      },
+    });
+
+    if (existingUser) {
+      throw new ConflictException('Email already registered');
+    }
+
+    const passwordHash = await bcrypt.hash(dto.password, 12);
+
+    const otp = await this.otpService.generate();
+
+    await this.otpService.storeRegistration(dto.email, {
+      name: dto.name,
+      email: dto.email,
+      passwordHash,
+      otp,
+    });
+
+    await this.emailService.sendVerificationOtp(dto.email, otp);
+
+    return {
+      message: 'Verification OTP sent to your email',
+    };
+  }
+
   async verifyOwnerEmail(dto: VerifyEmailOtpDto) {
     const registration = await this.otpService.verifyRegistrationOtp(
       dto.email,
@@ -166,7 +197,7 @@ export class AuthService {
 
       const gym = await tx.gym.create({
         data: {
-          name: registration.gymName,
+          name: registration.gymName!,
           ownerId: user.id,
         },
       });
@@ -209,27 +240,63 @@ export class AuthService {
     };
   }
 
+  async verifyMemberEmail(dto: VerifyEmailOtpDto) {
+    const registration = await this.otpService.verifyRegistrationOtp(
+      dto.email,
+      dto.otp,
+    );
+
+    const result = await this.prisma.$transaction(async (tx) => {
+      const user = await tx.user.create({
+        data: {
+          name: registration.name,
+          email: registration.email,
+          passwordHash: registration.passwordHash,
+          role: 'MEMBER',
+        },
+      });
+
+      const member = await tx.member.create({
+        data: {
+          userId: user.id,
+          qrToken: crypto.randomUUID(),
+        },
+      });
+
+      return {
+        user,
+        member,
+      };
+    });
+
+    return {
+      message: 'Email verified and member registered successfully',
+      user: {
+        id: result.user.id,
+        name: result.user.name,
+        email: result.user.email,
+        role: result.user.role,
+      },
+      member: {
+        id: result.member.id,
+        qrToken: result.member.qrToken,
+      },
+    };
+  }
+
   async loginUser(dto: LoginUserDto) {
+    // 1. Find user
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,
       },
-      include: {
-        gyms: {
-          include: {
-            subscriptions: {
-              where: {
-                status: {
-                  in: ['TRIAL', 'ACTIVE'],
-                },
-              },
-              orderBy: {
-                endDate: 'desc',
-              },
-              take: 1,
-            },
-          },
-        },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        passwordHash: true,
+        role: true,
+        mustChangePassword: true,
       },
     });
 
@@ -237,6 +304,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    // 2. Check password
     const passwordMatches = await bcrypt.compare(
       dto.password,
       user.passwordHash,
@@ -246,16 +314,123 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    // 3. Generate access token
     const accessToken = await this.jwtService.signAsync({
       sub: user.id,
       email: user.email,
       role: user.role,
     });
 
-    const gym = user.gyms[0];
+    // 4. Role-specific data
+    let gyms: any[] = [];
+    let memberships: any[] = [];
 
-    const subscription = gym?.subscriptions[0];
+    // OWNER
+    if (user.role === 'OWNER') {
+      const ownerGyms = await this.prisma.gym.findMany({
+        where: {
+          ownerId: user.id,
+        },
+        include: {
+          subscriptions: {
+            where: {
+              status: {
+                in: ['TRIAL', 'ACTIVE'],
+              },
+            },
+            orderBy: {
+              endDate: 'desc',
+            },
+            take: 1,
+          },
+        },
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
 
+      gyms = ownerGyms.map((gym) => {
+        const subscription = gym.subscriptions[0];
+
+        return {
+          id: gym.id,
+          name: gym.name,
+
+          subscription: subscription
+            ? {
+                id: subscription.id,
+                provider: subscription.provider,
+                status: subscription.status,
+                startDate: subscription.startDate,
+                endDate: subscription.endDate,
+              }
+            : null,
+        };
+      });
+    }
+
+    // MEMBER
+    if (user.role === 'MEMBER') {
+      const member = await this.prisma.member.findUnique({
+        where: {
+          userId: user.id,
+        },
+        include: {
+          memberships: {
+            where: {
+              status: 'ACTIVE',
+            },
+            orderBy: {
+              createdAt: 'desc',
+            },
+            include: {
+              gym: {
+                include: {
+                  subscriptions: {
+                    where: {
+                      status: {
+                        in: ['TRIAL', 'ACTIVE'],
+                      },
+                    },
+                    orderBy: {
+                      endDate: 'desc',
+                    },
+                    take: 1,
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+
+      memberships =
+        member?.memberships.map((membership) => {
+          const subscription = membership.gym.subscriptions[0];
+
+          return {
+            id: membership.id,
+            status: membership.status,
+
+            gym: {
+              id: membership.gym.id,
+              name: membership.gym.name,
+            },
+
+            subscription: subscription
+              ? {
+                  id: subscription.id,
+                  provider: subscription.provider,
+                  status: subscription.status,
+                  startDate: subscription.startDate,
+                  endDate: subscription.endDate,
+                }
+              : null,
+          };
+        }) ?? [];
+    }
+
+    // 5. Return response
     return {
       message: 'Login successful',
 
@@ -269,22 +444,9 @@ export class AuthService {
         mustChangePassword: user.mustChangePassword,
       },
 
-      gym: gym
-        ? {
-            id: gym.id,
-            name: gym.name,
-          }
-        : null,
+      gyms: user.role === 'OWNER' ? gyms : undefined,
 
-      subscription: subscription
-        ? {
-            id: subscription.id,
-            provider: subscription.provider,
-            status: subscription.status,
-            startDate: subscription.startDate,
-            endDate: subscription.endDate,
-          }
-        : null,
+      memberships: user.role === 'MEMBER' ? memberships : undefined,
     };
   }
 

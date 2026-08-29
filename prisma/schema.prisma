@@ -25,6 +25,8 @@ enum MembershipStatus {
   ACTIVE
   EXPIRED
   CANCELLED
+  PENDING
+  REJECTED
 }
 
 enum SubscriptionStatus {
@@ -135,8 +137,8 @@ model Membership {
   memberId String
   gymId    String
 
-  startDate DateTime
-  endDate   DateTime
+  startDate DateTime?
+  endDate   DateTime?
   status    MembershipStatus @default(ACTIVE)
 
   member Member @relation(fields: [memberId],references: [id],onDelete: Cascade)
