@@ -158,6 +158,13 @@ export type EnumMembershipStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumMembershipStatusFilter<$PrismaModel> | $Enums.MembershipStatus
 }
 
+export type EnumMembershipPaymentStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MembershipPaymentStatus | Prisma.EnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MembershipPaymentStatus[] | Prisma.ListEnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MembershipPaymentStatus[] | Prisma.ListEnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMembershipPaymentStatusFilter<$PrismaModel> | $Enums.MembershipPaymentStatus
+}
+
 export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -180,6 +187,16 @@ export type EnumMembershipStatusWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMembershipStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMembershipStatusFilter<$PrismaModel>
+}
+
+export type EnumMembershipPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MembershipPaymentStatus | Prisma.EnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MembershipPaymentStatus[] | Prisma.ListEnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MembershipPaymentStatus[] | Prisma.ListEnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMembershipPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.MembershipPaymentStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMembershipPaymentStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMembershipPaymentStatusFilter<$PrismaModel>
 }
 
 export type EnumSubscriptionStatusFilter<$PrismaModel = never> = {
@@ -231,6 +248,23 @@ export type EnumNotificationDeliveryStatusWithAggregatesFilter<$PrismaModel = ne
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNotificationDeliveryStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNotificationDeliveryStatusFilter<$PrismaModel>
+}
+
+export type EnumMembershipNotificationTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.MembershipNotificationType | Prisma.EnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.MembershipNotificationType[] | Prisma.ListEnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MembershipNotificationType[] | Prisma.ListEnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMembershipNotificationTypeFilter<$PrismaModel> | $Enums.MembershipNotificationType
+}
+
+export type EnumMembershipNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MembershipNotificationType | Prisma.EnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.MembershipNotificationType[] | Prisma.ListEnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MembershipNotificationType[] | Prisma.ListEnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMembershipNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.MembershipNotificationType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMembershipNotificationTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMembershipNotificationTypeFilter<$PrismaModel>
 }
 
 export type NestedStringFilter<$PrismaModel = never> = {
@@ -390,6 +424,13 @@ export type NestedEnumMembershipStatusFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumMembershipStatusFilter<$PrismaModel> | $Enums.MembershipStatus
 }
 
+export type NestedEnumMembershipPaymentStatusFilter<$PrismaModel = never> = {
+  equals?: $Enums.MembershipPaymentStatus | Prisma.EnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MembershipPaymentStatus[] | Prisma.ListEnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MembershipPaymentStatus[] | Prisma.ListEnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMembershipPaymentStatusFilter<$PrismaModel> | $Enums.MembershipPaymentStatus
+}
+
 export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
   equals?: Date | string | Prisma.DateTimeFieldRefInput<$PrismaModel> | null
   in?: Date[] | string[] | Prisma.ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -412,6 +453,16 @@ export type NestedEnumMembershipStatusWithAggregatesFilter<$PrismaModel = never>
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumMembershipStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumMembershipStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumMembershipPaymentStatusWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MembershipPaymentStatus | Prisma.EnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  in?: $Enums.MembershipPaymentStatus[] | Prisma.ListEnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MembershipPaymentStatus[] | Prisma.ListEnumMembershipPaymentStatusFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMembershipPaymentStatusWithAggregatesFilter<$PrismaModel> | $Enums.MembershipPaymentStatus
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMembershipPaymentStatusFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMembershipPaymentStatusFilter<$PrismaModel>
 }
 
 export type NestedEnumSubscriptionStatusFilter<$PrismaModel = never> = {
@@ -463,6 +514,23 @@ export type NestedEnumNotificationDeliveryStatusWithAggregatesFilter<$PrismaMode
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumNotificationDeliveryStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumNotificationDeliveryStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumMembershipNotificationTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.MembershipNotificationType | Prisma.EnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.MembershipNotificationType[] | Prisma.ListEnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MembershipNotificationType[] | Prisma.ListEnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMembershipNotificationTypeFilter<$PrismaModel> | $Enums.MembershipNotificationType
+}
+
+export type NestedEnumMembershipNotificationTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MembershipNotificationType | Prisma.EnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.MembershipNotificationType[] | Prisma.ListEnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MembershipNotificationType[] | Prisma.ListEnumMembershipNotificationTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMembershipNotificationTypeWithAggregatesFilter<$PrismaModel> | $Enums.MembershipNotificationType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMembershipNotificationTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMembershipNotificationTypeFilter<$PrismaModel>
 }
 
 

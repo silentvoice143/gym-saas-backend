@@ -72,6 +72,10 @@ export class AttendanceService {
       throw new ConflictException('Attendance already marked for today');
     }
 
+    if (membership.endDate && membership.endDate < now) {
+      throw new ForbiddenException('Your membership has expired');
+    }
+
     // 5. Create attendance
     const attendance = await this.prisma.attendance.create({
       data: {

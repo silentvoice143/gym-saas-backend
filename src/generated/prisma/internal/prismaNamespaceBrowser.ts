@@ -59,7 +59,8 @@ export const ModelName = {
   Subscription: 'Subscription',
   Notification: 'Notification',
   UserDevice: 'UserDevice',
-  NotificationRecipient: 'NotificationRecipient'
+  NotificationRecipient: 'NotificationRecipient',
+  MembershipNotification: 'MembershipNotification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -129,6 +130,7 @@ export const MembershipScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   status: 'status',
+  paymentStatus: 'paymentStatus',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -195,6 +197,16 @@ export const NotificationRecipientScalarFieldEnum = {
 } as const
 
 export type NotificationRecipientScalarFieldEnum = (typeof NotificationRecipientScalarFieldEnum)[keyof typeof NotificationRecipientScalarFieldEnum]
+
+
+export const MembershipNotificationScalarFieldEnum = {
+  id: 'id',
+  membershipId: 'membershipId',
+  type: 'type',
+  sentAt: 'sentAt'
+} as const
+
+export type MembershipNotificationScalarFieldEnum = (typeof MembershipNotificationScalarFieldEnum)[keyof typeof MembershipNotificationScalarFieldEnum]
 
 
 export const SortOrder = {

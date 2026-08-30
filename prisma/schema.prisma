@@ -27,6 +27,8 @@ enum MembershipStatus {
   CANCELLED
   PENDING
   REJECTED
+  REVOKED
+
 }
 
 enum SubscriptionStatus {
@@ -46,6 +48,11 @@ enum NotificationDeliveryStatus {
   PENDING
   SENT
   FAILED
+}
+
+enum MembershipPaymentStatus {
+  PAID
+  DUE
 }
 
 // ─────────────────────────────────────────────
@@ -147,13 +154,16 @@ model Membership {
 
   gym Gym @relation("GymMemberships",fields: [gymId],references: [id],onDelete: Cascade)
 
+  paymentStatus MembershipPaymentStatus @default(DUE)
+
   // One membership can have many attendance records
   attendance Attendance[]
+
+  notifications MembershipNotification[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@unique([memberId, gymId])
 
   @@index([memberId])
   @@index([gymId])
@@ -269,4 +279,30 @@ model NotificationRecipient {
   @@index([userId])
   @@index([notificationId])
   @@index([userId, status])
+}
+
+enum MembershipNotificationType {
+  PAYMENT_DUE_5_DAYS
+  PAYMENT_DUE_4_DAYS
+  PAYMENT_DUE_3_DAYS
+  PAYMENT_DUE_2_DAYS
+  PAYMENT_DUE_1_DAY
+
+  PAYMENT_GRACE_DAY_1
+  PAYMENT_GRACE_DAY_2
+  PAYMENT_GRACE_DAY_3
+  PAYMENT_GRACE_DAY_4
+  PAYMENT_GRACE_DAY_5
+}
+
+model MembershipNotification {
+  id           String   @id @default(cuid())
+  membershipId String
+  type         MembershipNotificationType
+  sentAt       DateTime @default(now())
+
+  membership Membership @relation(fields: [membershipId],references: [id],onDelete: Cascade)
+
+  @@unique([membershipId, type])
+  @@index([membershipId])
 }

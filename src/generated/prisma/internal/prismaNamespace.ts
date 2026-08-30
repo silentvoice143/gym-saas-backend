@@ -405,7 +405,8 @@ export const ModelName = {
   Subscription: 'Subscription',
   Notification: 'Notification',
   UserDevice: 'UserDevice',
-  NotificationRecipient: 'NotificationRecipient'
+  NotificationRecipient: 'NotificationRecipient',
+  MembershipNotification: 'MembershipNotification'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -421,7 +422,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "gym" | "member" | "membership" | "attendance" | "subscription" | "notification" | "userDevice" | "notificationRecipient"
+    modelProps: "user" | "gym" | "member" | "membership" | "attendance" | "subscription" | "notification" | "userDevice" | "notificationRecipient" | "membershipNotification"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1091,6 +1092,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    MembershipNotification: {
+      payload: Prisma.$MembershipNotificationPayload<ExtArgs>
+      fields: Prisma.MembershipNotificationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MembershipNotificationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MembershipNotificationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload>
+        }
+        findFirst: {
+          args: Prisma.MembershipNotificationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MembershipNotificationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload>
+        }
+        findMany: {
+          args: Prisma.MembershipNotificationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload>[]
+        }
+        create: {
+          args: Prisma.MembershipNotificationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload>
+        }
+        createMany: {
+          args: Prisma.MembershipNotificationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MembershipNotificationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload>[]
+        }
+        delete: {
+          args: Prisma.MembershipNotificationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload>
+        }
+        update: {
+          args: Prisma.MembershipNotificationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload>
+        }
+        deleteMany: {
+          args: Prisma.MembershipNotificationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MembershipNotificationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MembershipNotificationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload>[]
+        }
+        upsert: {
+          args: Prisma.MembershipNotificationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MembershipNotificationPayload>
+        }
+        aggregate: {
+          args: Prisma.MembershipNotificationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMembershipNotification>
+        }
+        groupBy: {
+          args: Prisma.MembershipNotificationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MembershipNotificationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MembershipNotificationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MembershipNotificationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1181,6 +1256,7 @@ export const MembershipScalarFieldEnum = {
   startDate: 'startDate',
   endDate: 'endDate',
   status: 'status',
+  paymentStatus: 'paymentStatus',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -1247,6 +1323,16 @@ export const NotificationRecipientScalarFieldEnum = {
 } as const
 
 export type NotificationRecipientScalarFieldEnum = (typeof NotificationRecipientScalarFieldEnum)[keyof typeof NotificationRecipientScalarFieldEnum]
+
+
+export const MembershipNotificationScalarFieldEnum = {
+  id: 'id',
+  membershipId: 'membershipId',
+  type: 'type',
+  sentAt: 'sentAt'
+} as const
+
+export type MembershipNotificationScalarFieldEnum = (typeof MembershipNotificationScalarFieldEnum)[keyof typeof MembershipNotificationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1343,6 +1429,20 @@ export type ListEnumMembershipStatusFieldRefInput<$PrismaModel> = FieldRefInputT
 
 
 /**
+ * Reference to a field of type 'MembershipPaymentStatus'
+ */
+export type EnumMembershipPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipPaymentStatus'>
+    
+
+
+/**
+ * Reference to a field of type 'MembershipPaymentStatus[]'
+ */
+export type ListEnumMembershipPaymentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipPaymentStatus[]'>
+    
+
+
+/**
  * Reference to a field of type 'SubscriptionStatus'
  */
 export type EnumSubscriptionStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'SubscriptionStatus'>
@@ -1381,6 +1481,20 @@ export type EnumNotificationDeliveryStatusFieldRefInput<$PrismaModel> = FieldRef
  * Reference to a field of type 'NotificationDeliveryStatus[]'
  */
 export type ListEnumNotificationDeliveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationDeliveryStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MembershipNotificationType'
+ */
+export type EnumMembershipNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipNotificationType'>
+    
+
+
+/**
+ * Reference to a field of type 'MembershipNotificationType[]'
+ */
+export type ListEnumMembershipNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MembershipNotificationType[]'>
     
 
 
@@ -1557,6 +1671,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   userDevice?: Prisma.UserDeviceOmit
   notificationRecipient?: Prisma.NotificationRecipientOmit
+  membershipNotification?: Prisma.MembershipNotificationOmit
 }
 
 /* Types for Logging */

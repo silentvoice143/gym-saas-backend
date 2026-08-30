@@ -23,7 +23,9 @@ export const MembershipStatus = {
   EXPIRED: 'EXPIRED',
   CANCELLED: 'CANCELLED',
   PENDING: 'PENDING',
-  REJECTED: 'REJECTED'
+  REJECTED: 'REJECTED',
+  REVOKED: 'REVOKED',
+  GRACE_PERIOD: 'GRACE_PERIOD'
 } as const
 
 export type MembershipStatus = (typeof MembershipStatus)[keyof typeof MembershipStatus]
@@ -55,3 +57,27 @@ export const NotificationDeliveryStatus = {
 } as const
 
 export type NotificationDeliveryStatus = (typeof NotificationDeliveryStatus)[keyof typeof NotificationDeliveryStatus]
+
+
+export const MembershipPaymentStatus = {
+  PAID: 'PAID',
+  DUE: 'DUE'
+} as const
+
+export type MembershipPaymentStatus = (typeof MembershipPaymentStatus)[keyof typeof MembershipPaymentStatus]
+
+
+export const MembershipNotificationType = {
+  PAYMENT_DUE_5_DAYS: 'PAYMENT_DUE_5_DAYS',
+  PAYMENT_DUE_4_DAYS: 'PAYMENT_DUE_4_DAYS',
+  PAYMENT_DUE_3_DAYS: 'PAYMENT_DUE_3_DAYS',
+  PAYMENT_DUE_2_DAYS: 'PAYMENT_DUE_2_DAYS',
+  PAYMENT_DUE_1_DAY: 'PAYMENT_DUE_1_DAY',
+  PAYMENT_GRACE_DAY_1: 'PAYMENT_GRACE_DAY_1',
+  PAYMENT_GRACE_DAY_2: 'PAYMENT_GRACE_DAY_2',
+  PAYMENT_GRACE_DAY_3: 'PAYMENT_GRACE_DAY_3',
+  PAYMENT_GRACE_DAY_4: 'PAYMENT_GRACE_DAY_4',
+  PAYMENT_GRACE_DAY_5: 'PAYMENT_GRACE_DAY_5'
+} as const
+
+export type MembershipNotificationType = (typeof MembershipNotificationType)[keyof typeof MembershipNotificationType]

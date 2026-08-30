@@ -84,3 +84,8 @@ export type UserDevice = Prisma.UserDeviceModel
  * 
  */
 export type NotificationRecipient = Prisma.NotificationRecipientModel
+/**
+ * Model MembershipNotification
+ * 
+ */
+export type MembershipNotification = Prisma.MembershipNotificationModel

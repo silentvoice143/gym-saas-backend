@@ -31,6 +31,7 @@ export type MembershipMinAggregateOutputType = {
   startDate: Date | null
   endDate: Date | null
   status: $Enums.MembershipStatus | null
+  paymentStatus: $Enums.MembershipPaymentStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,6 +43,7 @@ export type MembershipMaxAggregateOutputType = {
   startDate: Date | null
   endDate: Date | null
   status: $Enums.MembershipStatus | null
+  paymentStatus: $Enums.MembershipPaymentStatus | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,6 +55,7 @@ export type MembershipCountAggregateOutputType = {
   startDate: number
   endDate: number
   status: number
+  paymentStatus: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -66,6 +69,7 @@ export type MembershipMinAggregateInputType = {
   startDate?: true
   endDate?: true
   status?: true
+  paymentStatus?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -77,6 +81,7 @@ export type MembershipMaxAggregateInputType = {
   startDate?: true
   endDate?: true
   status?: true
+  paymentStatus?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +93,7 @@ export type MembershipCountAggregateInputType = {
   startDate?: true
   endDate?: true
   status?: true
+  paymentStatus?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -172,6 +178,7 @@ export type MembershipGroupByOutputType = {
   startDate: Date | null
   endDate: Date | null
   status: $Enums.MembershipStatus
+  paymentStatus: $Enums.MembershipPaymentStatus
   createdAt: Date
   updatedAt: Date
   _count: MembershipCountAggregateOutputType | null
@@ -204,11 +211,13 @@ export type MembershipWhereInput = {
   startDate?: Prisma.DateTimeNullableFilter<"Membership"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"Membership"> | Date | string | null
   status?: Prisma.EnumMembershipStatusFilter<"Membership"> | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFilter<"Membership"> | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFilter<"Membership"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Membership"> | Date | string
   member?: Prisma.XOR<Prisma.MemberScalarRelationFilter, Prisma.MemberWhereInput>
   gym?: Prisma.XOR<Prisma.GymScalarRelationFilter, Prisma.GymWhereInput>
   attendance?: Prisma.AttendanceListRelationFilter
+  notifications?: Prisma.MembershipNotificationListRelationFilter
 }
 
 export type MembershipOrderByWithRelationInput = {
@@ -218,16 +227,17 @@ export type MembershipOrderByWithRelationInput = {
   startDate?: Prisma.SortOrderInput | Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   member?: Prisma.MemberOrderByWithRelationInput
   gym?: Prisma.GymOrderByWithRelationInput
   attendance?: Prisma.AttendanceOrderByRelationAggregateInput
+  notifications?: Prisma.MembershipNotificationOrderByRelationAggregateInput
 }
 
 export type MembershipWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  memberId_gymId?: Prisma.MembershipMemberIdGymIdCompoundUniqueInput
   AND?: Prisma.MembershipWhereInput | Prisma.MembershipWhereInput[]
   OR?: Prisma.MembershipWhereInput[]
   NOT?: Prisma.MembershipWhereInput | Prisma.MembershipWhereInput[]
@@ -236,12 +246,14 @@ export type MembershipWhereUniqueInput = Prisma.AtLeast<{
   startDate?: Prisma.DateTimeNullableFilter<"Membership"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"Membership"> | Date | string | null
   status?: Prisma.EnumMembershipStatusFilter<"Membership"> | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFilter<"Membership"> | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFilter<"Membership"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Membership"> | Date | string
   member?: Prisma.XOR<Prisma.MemberScalarRelationFilter, Prisma.MemberWhereInput>
   gym?: Prisma.XOR<Prisma.GymScalarRelationFilter, Prisma.GymWhereInput>
   attendance?: Prisma.AttendanceListRelationFilter
-}, "id" | "memberId_gymId">
+  notifications?: Prisma.MembershipNotificationListRelationFilter
+}, "id">
 
 export type MembershipOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -250,6 +262,7 @@ export type MembershipOrderByWithAggregationInput = {
   startDate?: Prisma.SortOrderInput | Prisma.SortOrder
   endDate?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.MembershipCountOrderByAggregateInput
@@ -267,6 +280,7 @@ export type MembershipScalarWhereWithAggregatesInput = {
   startDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Membership"> | Date | string | null
   endDate?: Prisma.DateTimeNullableWithAggregatesFilter<"Membership"> | Date | string | null
   status?: Prisma.EnumMembershipStatusWithAggregatesFilter<"Membership"> | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusWithAggregatesFilter<"Membership"> | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Membership"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Membership"> | Date | string
 }
@@ -276,11 +290,13 @@ export type MembershipCreateInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.MemberCreateNestedOneWithoutMembershipsInput
   gym: Prisma.GymCreateNestedOneWithoutMembershipsInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutMembershipInput
+  notifications?: Prisma.MembershipNotificationCreateNestedManyWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateInput = {
@@ -290,9 +306,11 @@ export type MembershipUncheckedCreateInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMembershipInput
+  notifications?: Prisma.MembershipNotificationUncheckedCreateNestedManyWithoutMembershipInput
 }
 
 export type MembershipUpdateInput = {
@@ -300,11 +318,13 @@ export type MembershipUpdateInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.MemberUpdateOneRequiredWithoutMembershipsNestedInput
   gym?: Prisma.GymUpdateOneRequiredWithoutMembershipsNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutMembershipNestedInput
+  notifications?: Prisma.MembershipNotificationUpdateManyWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateInput = {
@@ -314,9 +334,11 @@ export type MembershipUncheckedUpdateInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutMembershipNestedInput
+  notifications?: Prisma.MembershipNotificationUncheckedUpdateManyWithoutMembershipNestedInput
 }
 
 export type MembershipCreateManyInput = {
@@ -326,6 +348,7 @@ export type MembershipCreateManyInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -335,6 +358,7 @@ export type MembershipUpdateManyMutationInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -346,6 +370,7 @@ export type MembershipUncheckedUpdateManyInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -360,11 +385,6 @@ export type MembershipOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type MembershipMemberIdGymIdCompoundUniqueInput = {
-  memberId: string
-  gymId: string
-}
-
 export type MembershipCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   memberId?: Prisma.SortOrder
@@ -372,6 +392,7 @@ export type MembershipCountOrderByAggregateInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -383,6 +404,7 @@ export type MembershipMaxOrderByAggregateInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -394,6 +416,7 @@ export type MembershipMinOrderByAggregateInput = {
   startDate?: Prisma.SortOrder
   endDate?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -495,6 +518,10 @@ export type EnumMembershipStatusFieldUpdateOperationsInput = {
   set?: $Enums.MembershipStatus
 }
 
+export type EnumMembershipPaymentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.MembershipPaymentStatus
+}
+
 export type MembershipCreateNestedOneWithoutAttendanceInput = {
   create?: Prisma.XOR<Prisma.MembershipCreateWithoutAttendanceInput, Prisma.MembershipUncheckedCreateWithoutAttendanceInput>
   connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutAttendanceInput
@@ -509,15 +536,31 @@ export type MembershipUpdateOneRequiredWithoutAttendanceNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutAttendanceInput, Prisma.MembershipUpdateWithoutAttendanceInput>, Prisma.MembershipUncheckedUpdateWithoutAttendanceInput>
 }
 
+export type MembershipCreateNestedOneWithoutNotificationsInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutNotificationsInput, Prisma.MembershipUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutNotificationsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+}
+
+export type MembershipUpdateOneRequiredWithoutNotificationsNestedInput = {
+  create?: Prisma.XOR<Prisma.MembershipCreateWithoutNotificationsInput, Prisma.MembershipUncheckedCreateWithoutNotificationsInput>
+  connectOrCreate?: Prisma.MembershipCreateOrConnectWithoutNotificationsInput
+  upsert?: Prisma.MembershipUpsertWithoutNotificationsInput
+  connect?: Prisma.MembershipWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.MembershipUpdateToOneWithWhereWithoutNotificationsInput, Prisma.MembershipUpdateWithoutNotificationsInput>, Prisma.MembershipUncheckedUpdateWithoutNotificationsInput>
+}
+
 export type MembershipCreateWithoutGymInput = {
   id?: string
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.MemberCreateNestedOneWithoutMembershipsInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutMembershipInput
+  notifications?: Prisma.MembershipNotificationCreateNestedManyWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateWithoutGymInput = {
@@ -526,9 +569,11 @@ export type MembershipUncheckedCreateWithoutGymInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMembershipInput
+  notifications?: Prisma.MembershipNotificationUncheckedCreateNestedManyWithoutMembershipInput
 }
 
 export type MembershipCreateOrConnectWithoutGymInput = {
@@ -567,6 +612,7 @@ export type MembershipScalarWhereInput = {
   startDate?: Prisma.DateTimeNullableFilter<"Membership"> | Date | string | null
   endDate?: Prisma.DateTimeNullableFilter<"Membership"> | Date | string | null
   status?: Prisma.EnumMembershipStatusFilter<"Membership"> | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFilter<"Membership"> | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFilter<"Membership"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Membership"> | Date | string
 }
@@ -576,10 +622,12 @@ export type MembershipCreateWithoutMemberInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   gym: Prisma.GymCreateNestedOneWithoutMembershipsInput
   attendance?: Prisma.AttendanceCreateNestedManyWithoutMembershipInput
+  notifications?: Prisma.MembershipNotificationCreateNestedManyWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateWithoutMemberInput = {
@@ -588,9 +636,11 @@ export type MembershipUncheckedCreateWithoutMemberInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMembershipInput
+  notifications?: Prisma.MembershipNotificationUncheckedCreateNestedManyWithoutMembershipInput
 }
 
 export type MembershipCreateOrConnectWithoutMemberInput = {
@@ -624,10 +674,12 @@ export type MembershipCreateWithoutAttendanceInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   member: Prisma.MemberCreateNestedOneWithoutMembershipsInput
   gym: Prisma.GymCreateNestedOneWithoutMembershipsInput
+  notifications?: Prisma.MembershipNotificationCreateNestedManyWithoutMembershipInput
 }
 
 export type MembershipUncheckedCreateWithoutAttendanceInput = {
@@ -637,8 +689,10 @@ export type MembershipUncheckedCreateWithoutAttendanceInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  notifications?: Prisma.MembershipNotificationUncheckedCreateNestedManyWithoutMembershipInput
 }
 
 export type MembershipCreateOrConnectWithoutAttendanceInput = {
@@ -662,10 +716,12 @@ export type MembershipUpdateWithoutAttendanceInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.MemberUpdateOneRequiredWithoutMembershipsNestedInput
   gym?: Prisma.GymUpdateOneRequiredWithoutMembershipsNestedInput
+  notifications?: Prisma.MembershipNotificationUpdateManyWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutAttendanceInput = {
@@ -675,8 +731,78 @@ export type MembershipUncheckedUpdateWithoutAttendanceInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  notifications?: Prisma.MembershipNotificationUncheckedUpdateManyWithoutMembershipNestedInput
+}
+
+export type MembershipCreateWithoutNotificationsInput = {
+  id?: string
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  member: Prisma.MemberCreateNestedOneWithoutMembershipsInput
+  gym: Prisma.GymCreateNestedOneWithoutMembershipsInput
+  attendance?: Prisma.AttendanceCreateNestedManyWithoutMembershipInput
+}
+
+export type MembershipUncheckedCreateWithoutNotificationsInput = {
+  id?: string
+  memberId: string
+  gymId: string
+  startDate?: Date | string | null
+  endDate?: Date | string | null
+  status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  attendance?: Prisma.AttendanceUncheckedCreateNestedManyWithoutMembershipInput
+}
+
+export type MembershipCreateOrConnectWithoutNotificationsInput = {
+  where: Prisma.MembershipWhereUniqueInput
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutNotificationsInput, Prisma.MembershipUncheckedCreateWithoutNotificationsInput>
+}
+
+export type MembershipUpsertWithoutNotificationsInput = {
+  update: Prisma.XOR<Prisma.MembershipUpdateWithoutNotificationsInput, Prisma.MembershipUncheckedUpdateWithoutNotificationsInput>
+  create: Prisma.XOR<Prisma.MembershipCreateWithoutNotificationsInput, Prisma.MembershipUncheckedCreateWithoutNotificationsInput>
+  where?: Prisma.MembershipWhereInput
+}
+
+export type MembershipUpdateToOneWithWhereWithoutNotificationsInput = {
+  where?: Prisma.MembershipWhereInput
+  data: Prisma.XOR<Prisma.MembershipUpdateWithoutNotificationsInput, Prisma.MembershipUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type MembershipUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  member?: Prisma.MemberUpdateOneRequiredWithoutMembershipsNestedInput
+  gym?: Prisma.GymUpdateOneRequiredWithoutMembershipsNestedInput
+  attendance?: Prisma.AttendanceUpdateManyWithoutMembershipNestedInput
+}
+
+export type MembershipUncheckedUpdateWithoutNotificationsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  memberId?: Prisma.StringFieldUpdateOperationsInput | string
+  gymId?: Prisma.StringFieldUpdateOperationsInput | string
+  startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutMembershipNestedInput
 }
 
 export type MembershipCreateManyGymInput = {
@@ -685,6 +811,7 @@ export type MembershipCreateManyGymInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -694,10 +821,12 @@ export type MembershipUpdateWithoutGymInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   member?: Prisma.MemberUpdateOneRequiredWithoutMembershipsNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutMembershipNestedInput
+  notifications?: Prisma.MembershipNotificationUpdateManyWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutGymInput = {
@@ -706,9 +835,11 @@ export type MembershipUncheckedUpdateWithoutGymInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutMembershipNestedInput
+  notifications?: Prisma.MembershipNotificationUncheckedUpdateManyWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutGymInput = {
@@ -717,6 +848,7 @@ export type MembershipUncheckedUpdateManyWithoutGymInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -727,6 +859,7 @@ export type MembershipCreateManyMemberInput = {
   startDate?: Date | string | null
   endDate?: Date | string | null
   status?: $Enums.MembershipStatus
+  paymentStatus?: $Enums.MembershipPaymentStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -736,10 +869,12 @@ export type MembershipUpdateWithoutMemberInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   gym?: Prisma.GymUpdateOneRequiredWithoutMembershipsNestedInput
   attendance?: Prisma.AttendanceUpdateManyWithoutMembershipNestedInput
+  notifications?: Prisma.MembershipNotificationUpdateManyWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateWithoutMemberInput = {
@@ -748,9 +883,11 @@ export type MembershipUncheckedUpdateWithoutMemberInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   attendance?: Prisma.AttendanceUncheckedUpdateManyWithoutMembershipNestedInput
+  notifications?: Prisma.MembershipNotificationUncheckedUpdateManyWithoutMembershipNestedInput
 }
 
 export type MembershipUncheckedUpdateManyWithoutMemberInput = {
@@ -759,6 +896,7 @@ export type MembershipUncheckedUpdateManyWithoutMemberInput = {
   startDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   status?: Prisma.EnumMembershipStatusFieldUpdateOperationsInput | $Enums.MembershipStatus
+  paymentStatus?: Prisma.EnumMembershipPaymentStatusFieldUpdateOperationsInput | $Enums.MembershipPaymentStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -770,10 +908,12 @@ export type MembershipUncheckedUpdateManyWithoutMemberInput = {
 
 export type MembershipCountOutputType = {
   attendance: number
+  notifications: number
 }
 
 export type MembershipCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   attendance?: boolean | MembershipCountOutputTypeCountAttendanceArgs
+  notifications?: boolean | MembershipCountOutputTypeCountNotificationsArgs
 }
 
 /**
@@ -793,6 +933,13 @@ export type MembershipCountOutputTypeCountAttendanceArgs<ExtArgs extends runtime
   where?: Prisma.AttendanceWhereInput
 }
 
+/**
+ * MembershipCountOutputType without action
+ */
+export type MembershipCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.MembershipNotificationWhereInput
+}
+
 
 export type MembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -801,11 +948,13 @@ export type MembershipSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   startDate?: boolean
   endDate?: boolean
   status?: boolean
+  paymentStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
   gym?: boolean | Prisma.GymDefaultArgs<ExtArgs>
   attendance?: boolean | Prisma.Membership$attendanceArgs<ExtArgs>
+  notifications?: boolean | Prisma.Membership$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["membership"]>
 
@@ -816,6 +965,7 @@ export type MembershipSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   startDate?: boolean
   endDate?: boolean
   status?: boolean
+  paymentStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
@@ -829,6 +979,7 @@ export type MembershipSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   startDate?: boolean
   endDate?: boolean
   status?: boolean
+  paymentStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
@@ -842,15 +993,17 @@ export type MembershipSelectScalar = {
   startDate?: boolean
   endDate?: boolean
   status?: boolean
+  paymentStatus?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type MembershipOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "gymId" | "startDate" | "endDate" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["membership"]>
+export type MembershipOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "memberId" | "gymId" | "startDate" | "endDate" | "status" | "paymentStatus" | "createdAt" | "updatedAt", ExtArgs["result"]["membership"]>
 export type MembershipInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   member?: boolean | Prisma.MemberDefaultArgs<ExtArgs>
   gym?: boolean | Prisma.GymDefaultArgs<ExtArgs>
   attendance?: boolean | Prisma.Membership$attendanceArgs<ExtArgs>
+  notifications?: boolean | Prisma.Membership$notificationsArgs<ExtArgs>
   _count?: boolean | Prisma.MembershipCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type MembershipIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -868,6 +1021,7 @@ export type $MembershipPayload<ExtArgs extends runtime.Types.Extensions.Internal
     member: Prisma.$MemberPayload<ExtArgs>
     gym: Prisma.$GymPayload<ExtArgs>
     attendance: Prisma.$AttendancePayload<ExtArgs>[]
+    notifications: Prisma.$MembershipNotificationPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -876,6 +1030,7 @@ export type $MembershipPayload<ExtArgs extends runtime.Types.Extensions.Internal
     startDate: Date | null
     endDate: Date | null
     status: $Enums.MembershipStatus
+    paymentStatus: $Enums.MembershipPaymentStatus
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["membership"]>
@@ -1275,6 +1430,7 @@ export interface Prisma__MembershipClient<T, Null = never, ExtArgs extends runti
   member<T extends Prisma.MemberDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MemberDefaultArgs<ExtArgs>>): Prisma.Prisma__MemberClient<runtime.Types.Result.GetResult<Prisma.$MemberPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   gym<T extends Prisma.GymDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.GymDefaultArgs<ExtArgs>>): Prisma.Prisma__GymClient<runtime.Types.Result.GetResult<Prisma.$GymPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   attendance<T extends Prisma.Membership$attendanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$attendanceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttendancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notifications<T extends Prisma.Membership$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Membership$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MembershipNotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1310,6 +1466,7 @@ export interface MembershipFieldRefs {
   readonly startDate: Prisma.FieldRef<"Membership", 'DateTime'>
   readonly endDate: Prisma.FieldRef<"Membership", 'DateTime'>
   readonly status: Prisma.FieldRef<"Membership", 'MembershipStatus'>
+  readonly paymentStatus: Prisma.FieldRef<"Membership", 'MembershipPaymentStatus'>
   readonly createdAt: Prisma.FieldRef<"Membership", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Membership", 'DateTime'>
 }
@@ -1734,6 +1891,30 @@ export type Membership$attendanceArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.AttendanceScalarFieldEnum | Prisma.AttendanceScalarFieldEnum[]
+}
+
+/**
+ * Membership.notifications
+ */
+export type Membership$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the MembershipNotification
+   */
+  select?: Prisma.MembershipNotificationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the MembershipNotification
+   */
+  omit?: Prisma.MembershipNotificationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.MembershipNotificationInclude<ExtArgs> | null
+  where?: Prisma.MembershipNotificationWhereInput
+  orderBy?: Prisma.MembershipNotificationOrderByWithRelationInput | Prisma.MembershipNotificationOrderByWithRelationInput[]
+  cursor?: Prisma.MembershipNotificationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.MembershipNotificationScalarFieldEnum | Prisma.MembershipNotificationScalarFieldEnum[]
 }
 
 /**

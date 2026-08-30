@@ -16,6 +16,8 @@ import { CreateEnrollmentDto } from './dto/membership-enrollment.dto.ts/create-e
 
 import { UpdateMembershipStatusDto } from './dto/update-membership-status.dto.ts/update-membership-status.dto.ts';
 
+import { UpdateMembershipPaymentStatusDto } from './dto/update-membership-payment-status.dto';
+
 import { JwtAuthGuard } from 'src/auth/gaurds/jwt-auth.gaurd';
 
 import { RolesGuard } from 'src/auth/gaurds/role-auth.gaurd';
@@ -63,7 +65,7 @@ export class MembershipsController {
   }
 
   // ─────────────────────────────────────────────
-  // OWNER → Approve / Reject enrollment
+  // OWNER → Approve / Reject / Revoke / Restore
   // ─────────────────────────────────────────────
 
   @Patch(':membershipId/status')
@@ -78,6 +80,42 @@ export class MembershipsController {
       req.user.userId,
       membershipId,
       dto,
+    );
+  }
+
+  // ─────────────────────────────────────────────
+  // OWNER → Mark payment PAID / DUE
+  // ─────────────────────────────────────────────
+
+  @Patch(':membershipId/payment-status')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('OWNER')
+  async updatePaymentStatus(
+    @Req() req: any,
+    @Param('membershipId') membershipId: string,
+    @Body() dto: UpdateMembershipPaymentStatusDto,
+  ) {
+    return this.membershipsService.updatePaymentStatus(
+      req.user.userId,
+      membershipId,
+      dto.paymentStatus,
+    );
+  }
+
+  // ─────────────────────────────────────────────
+  // MEMBER → Cancel membership
+  // ─────────────────────────────────────────────
+
+  @Patch(':membershipId/cancel')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('MEMBER')
+  async cancelMembership(
+    @Req() req: any,
+    @Param('membershipId') membershipId: string,
+  ) {
+    return this.membershipsService.cancelMembership(
+      req.user.userId,
+      membershipId,
     );
   }
 }
